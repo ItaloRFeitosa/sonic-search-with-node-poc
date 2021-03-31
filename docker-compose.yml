@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  api:
+    build:
+      context: ./api
+      target: dev
+    volumes:
+      - ./api/src:/usr/src/app/src:rw
+    ports:
+      - "3000:3000"
+    networks:
+      - sonic-network
+  sonic:
+    image: valeriansaliou/sonic:v1.3.0
+    volumes:
+      - ./sonic/config.cfg:/etc/sonic.cfg:rw
+      - ./sonic/store:/var/lib/sonic/store:rw
+    ports:
+      - "1491:1491"
+    networks:
+      - sonic-network
+
+networks:
+  sonic-network:
+    driver: bridge
